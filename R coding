@@ -4,7 +4,12 @@
 apply(is.na(broadcasting_data[,]),2,sum) 
 apply(is.na(traffic_data[,]),2,sum) # average session: 13,5% of missing values & 
                                     # bounces :49% of missing values . We delete variable "bounces"
-                                   
+                                              
+#Converting NAs to mean
+traffic_data <- traffic_data  %>% 
+  mutate(avg_session_quality = if_else(is.na(avg_session_quality) == TRUE, 
+                                 mean(avg_session_quality, na.rm = TRUE), avg_session_quality))                                 
+                        
 #Deleting "bounces"
 traffic_data <- subset(traffic_data, select = -c(bounces))
 summary(traffic_data)                                   
@@ -33,10 +38,7 @@ broadcasting_data$country <- as.factor(broadcasting_data$country)
 #Find the mean 
 mean(traffic_data$avg_session_quality, na.rm = TRUE)
 
-#Converting NAs to mean
-traffic_data <- traffic_data  %>% 
-  mutate(avg_session_quality = if_else(is.na(avg_session_quality) == TRUE, 
-                                 mean(avg_session_quality, na.rm = TRUE), avg_session_quality))
+
 
 
 #Check for outliers
@@ -49,9 +51,6 @@ library(psych)
 describe(broadcasting_data)
 describe(traffic_data$avg_session_quality)
 describe(traffic_data$visits_index)
-
-
-
 
                               
                                    
