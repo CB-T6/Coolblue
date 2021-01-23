@@ -7,4 +7,5 @@ summary(traffic_data$date_time)
 
 #Check for missing values 
 apply(is.na(broadcasting_data[,]),2,sum) 
-apply(is.na(traffic_data[,]),2,sum) 
+apply(is.na(traffic_data[,]),2,sum) # average session: 13,5% of missing values & 
+                                    # bounces :49% of missing values . We delete variable "bounces"
