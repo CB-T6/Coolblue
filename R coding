@@ -44,6 +44,11 @@ boxplot(broadcasting_data$gross_rating_point,xlab ="gross_rating_point")        
 boxplot(traffic_data$avg_session_quality,xlab ="avg_session_quality")
 
 
+#Descriptive Statistics
+library(psych)
+describe(broadcasting_data)
+describe(traffic_data$avg_session_quality)
+describe(traffic_data$visits_index)
 
 
 
