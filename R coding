@@ -20,6 +20,7 @@ traffic_data$date_time <- as.POSIXct(traffic_data$date_time)
 traffic_data$medium <- as.factor(traffic_data$medium)
 traffic_data$visit_source <- as.factor(traffic_data$visit_source)
 traffic_data$page_category<-as.factor(traffic_data$page_category)
+traffic_data$country<-as.factor(traffic_data$country)
 
 
 #find the mean 
