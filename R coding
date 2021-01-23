@@ -1,8 +1,8 @@
 #Coolblue
 
 
-df$date_time <- as.POSIXct(df$date_time)
-summary(df$date_time)
+traffic_data$date_time <- as.POSIXct(traffic_data$date_time)
+summary(traffic_data$date_time)
 
 
 #Check for missing values 
