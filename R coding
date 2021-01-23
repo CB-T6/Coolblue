@@ -38,9 +38,6 @@ broadcasting_data$country <- as.factor(broadcasting_data$country)
 #Find the mean 
 mean(traffic_data$avg_session_quality, na.rm = TRUE)
 
-
-
-
 #Check for outliers
 boxplot(broadcasting_data$gross_rating_point,xlab ="gross_rating_point")          # many  outliers, not gonna delete them, important for analysis
 boxplot(traffic_data$avg_session_quality,xlab ="avg_session_quality")
