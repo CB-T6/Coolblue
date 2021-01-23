@@ -14,5 +14,23 @@ apply(is.na(traffic_data[,]),2,sum) # average session: 13,5% of missing values &
 traffic_data <- subset(traffic_data, select = -c(bounces))
 summary(traffic_data)                                   
                                    
-                                   
+#convert into dates
+traffic_data$date_time <- as.POSIXct(traffic_data$date_time)
+#factorize
+traffic_data$medium <- as.factor(traffic_data$medium)
+traffic_data$visit_source <- as.factor(traffic_data$visit_source)
+traffic_data$page_category<-as.factor(traffic_data$page_category)
+
+
+#find the mean 
+apply(is.na(traffic_data[,]),2,sum) 
+mean(traffic_data$avg_session_quality, na.rm = TRUE)
+
+#converting NAs to mean
+traffic_data <- traffic_data  %>% 
+  mutate(avg_session_quality = if_else(is.na(avg_session_quality) == TRUE, 
+                                 mean(avg_session_quality, na.rm = TRUE), avg_session_quality))
+
+
+                              
                                    
