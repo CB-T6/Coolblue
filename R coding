@@ -1,3 +1,10 @@
 #Coolblue
+
+
 df$date_time <- as.POSIXct(df$date_time)
 summary(df$date_time)
+
+
+#Check for missing values 
+apply(is.na(broadcasting_data[,]),2,sum) 
+apply(is.na(traffic_data[,]),2,sum) 
