@@ -9,3 +9,10 @@ summary(traffic_data$date_time)
 apply(is.na(broadcasting_data[,]),2,sum) 
 apply(is.na(traffic_data[,]),2,sum) # average session: 13,5% of missing values & 
                                     # bounces :49% of missing values . We delete variable "bounces"
+                                   
+#Deleting "bounces"
+traffic_data <- subset(traffic_data, select = -c(bounces))
+summary(traffic_data)                                   
+                                   
+                                   
+                                   
