@@ -1,1 +1,3 @@
 #Coolblue
+df$date_time <- as.POSIXct(df$date_time)
+summary(df$date_time)
