@@ -105,3 +105,28 @@ cov(traffic_data$avg_session_quality, traffic_data$visits_index) #=variance, -0.
 
 plot(traffic_data$avg_session_quality, traffic_data$visits_index)
                                   
+                                  
+                                  
+#DATA EXPLORATION FOR BROADCASTING 
+plot(broadcasting_data$position_in_break, broadcasting_data$length_of_spot)
+plot(broadcasting_data$gross_rating_point, broadcasting_data$position_in_break)
+
+levels(broadcasting_data$position_in_break ) #to use
+
+
+table(broadcasting_data$length_of_spot, broadcasting_data$country )
+table(broadcasting_data$position_in_break, broadcasting_data$country)
+
+#RELEVELS
+levels(broadcasting_data$position_in_break)[levels(broadcasting_data$position_in_break) == "Before Last Position"] <- "98"
+levels(broadcasting_data$position_in_break)[levels(broadcasting_data$position_in_break) == "Any Other Position"] <- "0"
+levels(broadcasting_data$position_in_break)[levels(broadcasting_data$position_in_break) == "First Position"] <- "1"
+levels(broadcasting_data$position_in_break)[levels(broadcasting_data$position_in_break) == "Last Position"] <- "99"
+levels(broadcasting_data$position_in_break)[levels(broadcasting_data$position_in_break) == "Second Position"] <- "2"
+levels(broadcasting_data$position_in_break ) #to use
+
+
+
+
+
+
