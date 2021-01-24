@@ -14,7 +14,7 @@ traffic_data <- traffic_data  %>%
 traffic_data <- subset(traffic_data, select = -c(bounces))
 summary(traffic_data)                                   
                                    
-#Convert into dates
+#Convert into dates/time
 traffic_data$date_time <- as.POSIXct(traffic_data$date_time)
 broadcasting_data$date <- as.POSIXct(broadcasting_data$date)
 
@@ -33,10 +33,11 @@ broadcasting_data$program_category_before <- as.factor(broadcasting_data$program
 broadcasting_data$program_category_after <- as.factor(broadcasting_data$program_category_after)
 broadcasting_data$product_category <- as.factor(broadcasting_data$product_category)
 broadcasting_data$country <- as.factor(broadcasting_data$country)
+ 
 
-
-#Find the mean 
-mean(traffic_data$avg_session_quality, na.rm = TRUE)
+#cleanup first
+updated_traffic <- subset(traffic_data, visit_source!= "paid search",visit_source!= "other")
+traffic_data <- subset(updated_traffic, visit_source!= "other")
 
 #Check for outliers
 boxplot(broadcasting_data$gross_rating_point,xlab ="gross_rating_point")          # many  outliers, not gonna delete them, important for analysis
@@ -48,30 +49,10 @@ library(psych)
 describe(broadcasting_data)
 describe(traffic_data$avg_session_quality)
 describe(traffic_data$visits_index)
-
-                              
- #data exploration 
-#convert into dates
-traffic_data$date_time <- as.POSIXct(traffic_data$date_time)
-
-#cleanup first
-updated_traffic <- subset(traffic_data, visit_source!= "paid search",visit_source!= "other")
-traffic_data <- subset(updated_traffic, visit_source!= "other")
-#eliminate bounce variable
-traffic_data <- traffic_data[-7] 
-
-#factorize
-traffic_data$medium <- as.factor(traffic_data$medium)
-traffic_data$visit_source <- as.factor(traffic_data$visit_source)
-traffic_data$page_category<-as.factor(traffic_data$page_category)
-traffic_data$country<- as.factor(traffic_data$country)
-levels(traffic_data$page_category)
-
-str(traffic_data)
-
+                            
 
 #find the mean 
-
+mean(traffic_data$avg_session_quality, na.rm = TRUE)
 apply(is.na(traffic_data[,]),2,sum) 
 mean(traffic_data$avg_session_quality, na.rm = TRUE )
 
@@ -81,9 +62,6 @@ traffic_data <- traffic_data  %>%
   mutate(avg_session_quality = if_else(is.na(avg_session_quality) == TRUE, 
                                  mean(avg_session_quality, na.rm = TRUE), avg_session_quality))
 
-
-str(traffic_data)
-summary(traffic_data)
 
 #data exploration 
 #Mean and variance for two numeric variables
