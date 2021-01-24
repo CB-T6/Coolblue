@@ -129,10 +129,12 @@ levels(broadcasting_data$position_in_break ) #to use
 ####create df for tables
 broadtabledf <- broadcasting_data
 ####drop categories after top 5 for broadcast_data
+library(tidyverse)
 broadtabledf$program_category_before <- fct_lump_n(broadtabledf$program_category_before, n = 5)
 broadtabledf$program_category_after <- fct_lump_n(broadtabledf$program_category_after, n = 5)
 broadtabledf$position_in_break <- fct_lump_n(broadtabledf$position_in_break, n = 5)
 ##create tables
+library(table1)
 table1::table1(~position_in_break + length_of_spot + program_category_before + program_category_after | country, data = broadtabledf, topclass="Rtable1-zebra")
 table1::table1(~visits_index + medium + visit_source + page_category | country, data = traffic_data, topclass="Rtable1-zebra")
 
