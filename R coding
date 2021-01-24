@@ -51,6 +51,41 @@ describe(traffic_data$visits_index)
 
                               
  #data exploration 
+#convert into dates
+traffic_data$date_time <- as.POSIXct(traffic_data$date_time)
+
+#cleanup first
+updated_traffic <- subset(traffic_data, visit_source!= "paid search",visit_source!= "other")
+traffic_data <- subset(updated_traffic, visit_source!= "other")
+#eliminate bounce variable
+traffic_data <- traffic_data[-7] 
+
+#factorize
+traffic_data$medium <- as.factor(traffic_data$medium)
+traffic_data$visit_source <- as.factor(traffic_data$visit_source)
+traffic_data$page_category<-as.factor(traffic_data$page_category)
+traffic_data$country<- as.factor(traffic_data$country)
+levels(traffic_data$page_category)
+
+str(traffic_data)
+
+
+#find the mean 
+
+apply(is.na(traffic_data[,]),2,sum) 
+mean(traffic_data$avg_session_quality, na.rm = TRUE )
+
+
+#converting NAs to mean
+traffic_data <- traffic_data  %>% 
+  mutate(avg_session_quality = if_else(is.na(avg_session_quality) == TRUE, 
+                                 mean(avg_session_quality, na.rm = TRUE), avg_session_quality))
+
+
+str(traffic_data)
+summary(traffic_data)
+
+#data exploration 
 #Mean and variance for two numeric variables
 traffic_data %>%
   summarise(median=median(avg_session_quality), variance=var(avg_session_quality))
@@ -60,8 +95,11 @@ traffic_data %>%
   summarise(median=median(visits_index), variance=var(visits_index))
 
 traffic_data %>%
-  summarise(mean=mean(avg_session_quality), sum=sum(avg_session_quality), n=n())
+  summarise(mean=mean(visits_index), variance=var(visits_index))
 
+
+
+range(traffic_data$visits_index)
 
 min(traffic_data$avg_session_quality) #1
 max(traffic_data$avg_session_quality) #96
@@ -86,13 +124,9 @@ max(traffic_data$avg_session_quality) #96
     group_by(date_time, country) %>% 
     summarise(mean=mean(avg_session_quality), variance=var(avg_session_quality))) #notuseful
 
-table(traffic_data$medium, traffic_data$country)
+table(traffic_data$medium, traffic_data$country)/length(traffic_data$medium)
 table(traffic_data$page_category)/length(traffic_data$page_category)            
 table(traffic_data$page_category, traffic_data$country) / length(traffic_data$country)          
-table(traffic_data$avg_session_quality, traffic_data$medium)
-
-summary(traffic_data$avg_session_quality)
-
 
 #numeric variables
 range(traffic_data$avg_session_quality)
@@ -104,6 +138,7 @@ cov(traffic_data$avg_session_quality, traffic_data$visits_index) #=variance, -0.
 
 
 plot(traffic_data$avg_session_quality, traffic_data$visits_index)
+
                                   
                                   
                                   
