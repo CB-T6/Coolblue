@@ -36,7 +36,7 @@ broadcasting_data$country <- as.factor(broadcasting_data$country)
  
 
 #cleanup first
-updated_traffic <- subset(traffic_data, visit_source!= "paid search",visit_source!= "other")
+updated_traffic <- subset(traffic_data, visit_source!= "push notification",visit_source!= "other")
 traffic_data <- subset(updated_traffic, visit_source!= "other")
 
 #Check for outliers
