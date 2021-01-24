@@ -50,4 +50,58 @@ describe(traffic_data$avg_session_quality)
 describe(traffic_data$visits_index)
 
                               
-                                   
+ #data exploration 
+#Mean and variance for two numeric variables
+traffic_data %>%
+  summarise(median=median(avg_session_quality), variance=var(avg_session_quality))
+
+
+traffic_data %>%
+  summarise(median=median(visits_index), variance=var(visits_index))
+
+traffic_data %>%
+  summarise(mean=mean(avg_session_quality), sum=sum(avg_session_quality), n=n())
+
+
+min(traffic_data$avg_session_quality) #1
+max(traffic_data$avg_session_quality) #96
+
+
+
+(country_separation1 <- traffic_data %>%
+  group_by(country) %>% 
+  summarise(mean=mean(avg_session_quality), variance=var(avg_session_quality))) #useful
+
+(country_separation2 <- traffic_data %>%
+    group_by(country) %>% 
+    summarise(mean=mean(visits_index), variance=var(visits_index))) #useful
+
+
+#for now not helping, future?
+(country_separation3 <- traffic_data %>%
+    group_by(date_time) %>% 
+    summarise(mean=mean(avg_session_quality), variance=var(avg_session_quality))) #notuseful
+
+(country_separation3 <- traffic_data %>%
+    group_by(date_time, country) %>% 
+    summarise(mean=mean(avg_session_quality), variance=var(avg_session_quality))) #notuseful
+
+table(traffic_data$medium, traffic_data$country)
+table(traffic_data$page_category)/length(traffic_data$page_category)            
+table(traffic_data$page_category, traffic_data$country) / length(traffic_data$country)          
+table(traffic_data$avg_session_quality, traffic_data$medium)
+
+summary(traffic_data$avg_session_quality)
+
+
+#numeric variables
+range(traffic_data$avg_session_quality)
+range(traffic_data$visits_index) #maybe
+
+#corr - must be numeric
+cor(traffic_data$avg_session_quality, traffic_data$visits_index) #-0.005074682
+cov(traffic_data$avg_session_quality, traffic_data$visits_index) #=variance, -0.001598219
+
+
+plot(traffic_data$avg_session_quality, traffic_data$visits_index)
+                                  
