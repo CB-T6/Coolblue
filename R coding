@@ -151,6 +151,14 @@ library(table1)
 table1::table1(~position_in_break + length_of_spot + program_category_before + program_category_after | country, data = broadtabledf, topclass="Rtable1-zebra")
 table1::table1(~visits_index + medium + visit_source + page_category | country, data = traffic_data, topclass="Rtable1-zebra")
 
-
-
+##### merge for belgium with data.table package
+BEtraffic2 <- as.data.table(BEtraffic)
+BEbroad2 <- as.data.table(BEbroad)
+library(data.table)
+setkey(BEtraffic2, "date_time")
+setkey(BEbroad2, "date_time")
+two_minutes <- 2
+BEcombined <- BEbroad2[BEtraffic2, roll = -two_minutes]
+BEcombined <- BEtraffic2[BEbroad2, roll = -two_minutes]
+BEcombined <- BEbroad2[BEtraffic2, roll = +two_minutes]
 
