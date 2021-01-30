@@ -158,7 +158,5 @@ library(data.table)
 setkey(BEtraffic2, "date_time")
 setkey(BEbroad2, "date_time")
 two_minutes <- 2
-BEcombined <- BEbroad2[BEtraffic2, roll = -two_minutes]
-BEcombined <- BEtraffic2[BEbroad2, roll = -two_minutes]
 BEcombined <- BEbroad2[BEtraffic2, roll = +two_minutes]
 
