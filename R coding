@@ -183,5 +183,43 @@ didreg1 = lm(log(visits_index) ~ treated + time + did + medium + visit_source + 
 summary(didreg1)
 tab_model(didreg1)
 
+############metric of dif of number of visits 10 min before and 10 min after
+library(dplyr)
+library(tidyverse)
+
+traffic_datatest <-traffic_data
+broadcasting_datatest <-broadcasting_data6
+traffic_datatest$date_time <- as.numeric(traffic_data$date_time)
+broadcasting_datatest$dateandtime <- as.numeric(broadcasting_data6$dateandtime)
 
 
+NLtraffictest <- traffic_datatest %>% filter(country =="Netherlands")
+NLbroadtest <- broadcasting_datatest %>% filter(country =="Netherlands")
+
+BEtraffictest <- traffic_datatest %>% filter(country =="Belgium")
+BEbroadtest <- broadcasting_datatest %>% filter(country =="Belgium")
+
+NLbroadtest$twominbefore <- sapply(NLbroadtest$dateandtime, 
+                                             function(x){ sum((x >= NLtraffictest$date_time) & (x - 600 <= NLtraffictest$date_time))
+                                             })
+
+BEbroadtest$twominbefore <- sapply(BEbroadtest$dateandtime, 
+                                     function(x){ sum((x >= BEtraffictest$date_time) & (x - 600 <= BEtraffictest$date_time))
+                                     })
+
+
+
+NLbroadtest$twominafter <- sapply(NLbroadtest$dateandtime, 
+                                   function(x){ sum((x <= NLtraffictest$date_time) & (x + 600 >= NLtraffictest$date_time))
+                                   })
+
+BEbroadtest$twominafter <- sapply(BEbroadtest$dateandtime, 
+                                   function(x){ sum((x <= BEtraffictest$date_time) & (x + 600 >= BEtraffictest$date_time))
+                                   })
+
+NLbroadtest$ad_effect <- NLbroadtest$twominafter - NLbroadtest$twominbefore
+BEbroadtest$ad_effect <- BEbroadtest$twominafter - BEbroadtest$twominbefore
+ linearNL <- lm(NLbroadtest$ad_effect ~ NLbroadtest$operator + NLbroadtest$channel + NLbroadtest$position_in_break + NLbroadtest$length_of_spot + NLbroadtest$program_category_before + NLbroadtest$program_category_after
+                + NLbroadtest$gross_rating_point + NLbroadtest$product_category + NLbroadtest$dateandtime)
+summary(linearNL) 
+#############end of try of metric
