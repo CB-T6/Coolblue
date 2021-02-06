@@ -161,27 +161,7 @@ two_minutes <- 2
 BEcombined <- BEbroad2[BEtraffic2, roll = +two_minutes]
 
 
-####first Dif in Dif model
 
-broadcasting_data2 <- broadcasting_data
-broadcasting_data2$date_time <- as.POSIXct(paste(broadcasting_data2$date, broadcasting_data2$time), format="%Y-%m-%d %H:%M:%S")
-broadcasting_data2 <- broadcasting_data2 [,-3] # use this 2 times please to delete date and time old colmns
-BEtraffic <- traffic_data %>% filter(country =="Belgium")
-BEbroad <- broadcasting_data2 %>% filter(country =="Belgium")
-NLtraffic <- traffic_data %>% filter(country =="Netherlands")
-NLbroad <- broadcasting_data2 %>% filter(country =="Netherlands")
-didtraffic <- traffic_data %>% filter(date_time >"2019-01-28" & date_time < "2019-04-15")
-didtraffic$time = ifelse(didtraffic$date_time > "2019-01-28" & didtraffic$date_time < "2019-02-11" | 
-                           didtraffic$date_time > "2019-04-08" & didtraffic$date_time < "2019-04-15", 0, 1)
-didtraffic$treated = ifelse(didtraffic$country == "Netherlands", 1, 0)
-didtraffic$did = didtraffic$time * didtraffic$treated
-
-library(sjPlot)
-library(sjmisc)
-library(sjlabelled)
-didreg1 = lm(log(visits_index) ~ treated + time + did + medium + visit_source + page_category + avg_session_quality, data = didtraffic)
-summary(didreg1)
-tab_model(didreg1)
 
 ############metric of dif of number of visits 10 min before and 10 min after
 library(dplyr)
