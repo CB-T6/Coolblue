@@ -223,3 +223,106 @@ BEbroadtest$ad_effect <- BEbroadtest$twominafter - BEbroadtest$twominbefore
                 + NLbroadtest$gross_rating_point + NLbroadtest$product_category + NLbroadtest$dateandtime)
 summary(linearNL) 
 #############end of try of metric
+
+########adams SQL
+---
+title: "TEST"
+author: "Adam Kinser"
+date: "1/29/2021"
+output: html_document
+---
+```{r}
+broadcasting_data6 <- broadcasting_data
+broadcasting_data6$dateandtime <- as.POSIXct(paste(broadcasting_data$date, broadcasting_data$time), format="%Y-%m-%d %H:%M:%S")
+broadcasting_data6 <- broadcasting_data6 [,-3] # use this 2 times please to delete date and time old colmns
+NLtrafficSQL <- NLtraffic
+NLbroadSQL <- NLbroad
+```
+
+```{r setup, include=FALSE}
+
+library(RSQLite) # use this package to create a temporary SQL database on your computer
+library(DBI) # use this to write SQL chunks and write to your temporary database (DB)
+
+db <- dbConnect(RSQLite::SQLite(), ":memory:") # store the db in your memory
+
+knitr::opts_chunk$set(echo = TRUE) 
+knitr::opts_chunk$set(connection = "db") # set you db connection for the rmarkdown
+
+
+table_ad_data <- Id(table = "ad_data") # name your ad data SQL table
+
+DBI::dbWriteTable(conn = db, # database 
+                  name = table_ad_data, # name of your table
+                  value = NLbroad[], # what you are loading into the table
+                  overwrite = T) # overwrite option will replace the data in the current ad_data table with the new load value. You can remove `overwrite` and use `append` if you want the new value to be added to existing data.
+
+table_traffic <- Id(table = "traffic_data") 
+
+DBI::dbWriteTable(conn = db,
+                  name = table_traffic,
+                  value = NLtraffic[],
+                  overwrite = T)
+
+```
+
+# SQL code that you can add
+
+After adding your R chunk be sure to change the `r` to `sql` in order write SQL. 
+
+### Check first load
+```{sql, connection = db}
+
+select * from ad_data
+
+```
+
+### Check second load
+
+Note: I have to wrap `Sepal.Length` with `` because it has a '.' in the column name. If you don't do this you will get an error. 
+```{sql, connection = db}
+
+select * from traffic_data join ad_data on date_time <= dateandtime
+
+```
+
+### Perform the join with datetime
+
+In the below example I use cars column (speed) to represent your ad datetime and the iris column (Sepal.Length) to represent your traffic datetime. Be sure to add the `output.var` if you want to then use that data as a dataframe in the rest of the Rmarkdown. 
+```{sql, connection = db, output.var = "combined2"}
+
+SELECT 
+	ad.dateandtime as ad
+,	COUNT(date_time) as traffic
+, SUM(visits_index)/COUNT(tr.visits_index)
+FROM ad_data ad
+LEFT JOIN traffic_data tr
+		ON tr.date_time BETWEEN ad.dateandtime and (ad.dateandtime + 120)
+GROUP BY ad.dateandtime
+
+```
+
+
+```{r}
+combined2
+```
+
+
+```{sql, connection = db, output.var = "NLSQL"}
+WITH NL as 
+(SELECT 
+	ad.dateandtime as ad
+,	COUNT(date_time) as traffic
+, SUM(visits_index)/COUNT(tr.visits_index) as indexmean
+FROM ad_data ad
+LEFT JOIN traffic_data tr
+		ON tr.date_time BETWEEN ad.dateandtime and (ad.dateandtime + 120)
+GROUP BY ad.dateandtime)
+
+
+SELECT * FROM ad_data da INNER JOIN NL data
+ON da.dateandtime=data.ad 
+
+```
+
+#######adams SQL
