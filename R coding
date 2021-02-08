@@ -285,3 +285,65 @@ ON da.dateandtime=data.ad
 ```
 
 #######adams SQL
+
+
+
+
+
+################Netherlands ###################################
+library('fastDummies')
+data.5 <- NLbroadtest
+str(data.5)
+data.5$position_in_break <- as.factor(data.5$position_in_break) 
+#dummy for data 5 
+data.5 <- dummy_cols(NLbroadtest, select_columns = c('operator', 'channel', 
+                                                      'program_before', 'program_after',
+                                                      'program_category_before', 'program_category_after', 
+                                                      'product_category', 'position_in_break', 'length_of_spot'), remove_selected_columns = TRUE)
+
+
+data.5 <- data.5[-3] #erase country, dateandtime, twominsbefore, twominsafter
+data.5 <- data.5[-2] #erase the country 
+linearNL_in2 <- lm(data.5$ad_effect ~ data.5$`operator_Ad Alliance`+data.5$operator_Ster
+                   +data.5$channel_24Kitchen+data.5$`channel_BBC First Holland`
+                   +data.5$`channel_Comedy Central`+data.5$`channel_Discovery Channel`+data.5$channel_Eurosport
+                   +data.5$channel_Fox+data.5$`channel_Fox Sports 1`+data.5$`channel_Fox Sports 2`
+                   +data.5$`channel_Fox Sports 3`+data.5$channel_ID+
+                     +data.5$channel_MTV+data.5$`channel_National Geographic Channel`
+                   +data.5$channel_Net5+data.5$channel_NPO1
+                   +data.5$channel_NPO2+data.5$`channel_RTL 4`+data.5$`channel_RTL 5`+data.5$`channel_RTL 7`
+                   +data.5$`channel_RTL 8`+data.5$`channel_RTL Crime`+data.5$`channel_RTL Z`
+                   +data.5$`channel_SBS 6`+data.5$`channel_SBS 9`+data.5$`channel_Slam!TV`
+                   +data.5$channel_Spike+data.5$channel_TV538+
+                     data.5$channel_Veronica
+                   +data.5$position_in_break_1+data.5$position_in_break_2+data.5$position_in_break_3
+                   +data.5$position_in_break_4+data.5$position_in_break_5+data.5$position_in_break_6
+                   +data.5$position_in_break_7+data.5$position_in_break_8+data.5$position_in_break_9
+                   +data.5$position_in_break_10+data.5$position_in_break_11+data.5$position_in_break_12
+                   +data.5$position_in_break_13+data.5$position_in_break_14+data.5$position_in_break_15
+                   +data.5$position_in_break_16+data.5$position_in_break_17+data.5$position_in_break_18
+                   +data.5$position_in_break_19+data.5$position_in_break_20+data.5$position_in_break_21
+                   +data.5$position_in_break_22+data.5$position_in_break_23
+                   +data.5$position_in_break_24+data.5$position_in_break_25+data.5$position_in_break_98
+                   +data.5$gross_rating_point,data = data.5) #using levels of position in break and lenth of spot
+summary(linearNL_in2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
