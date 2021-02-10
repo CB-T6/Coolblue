@@ -364,6 +364,131 @@ summary(linear54)
 
 
 
+## Stepwise Regression 
+FitAll <- lm(ad_effect1~.,data = BEbroadtest)
+FitStart <- lm(ad_effect1~1,data= BEbroadtest)
+step(FitStart,direction = "both" ,scope = formula(FitAll))
+
+#output from stepwise regression for 1 minute time window
+stepoutput<- lm(ad_effect1~gross_rating_point
+                + `program_before_GET SANTA` 
+                + `program_before_THE HANGOVER PART III` 
+                + `program_before_BAKE OFF VLAANDEREN` 
+                + `program_before_FALSE FLAG` 
+                + `program_before_HOLLAND-BELGIE` 
+                +  `program_before_INFOMERCIAL` 
+                + `program_before_BLIND GEKOCHT` 
+                +  `program_before_POORT AUTOMATISEREN` 
+                + `program_before_LIFE IN PIECES` 
+                + `program_before_THOR, THE DARK WORLD` 
+                + `program_before_EEN FRISSE START MET VTWONEN` 
+                + `program_before_OCEAN'S THIRTEEN` 
+                + `program_before_KEVIN CAN WAIT` 
+                + `program_before_RISING TOP 15` 
+                + `program_before_POP STAR` 
+                + `program_before_FLIP OR FLOP`
+                + `program_before_THROWBACK THURSDAY` 
+                +  `program_before_FLODDER` 
+                + `program_before_WEEKEND VIBES` 
+                + `program_before_MATCHING CHAMPIONS` 
+                + `program_before_MY 3000 LB FAMILY` 
+                + `program_before_8 SIMPLE RULES... FOR DATING MY TEENAGE DAUGHTER`
+                + `program_before_GOD CODE` 
+                + `program_before_HUMO'S COMEDY CUP`
+                + `program_before_HAMILTON'S PHARMACOPEIA` 
+                + `program_before_MURDER, SHE WROTE` 
+                + `program_before_CASTLE` 
+                + `program_before_OWN THE NIGHT` 
+                + `program_before_LOVE AT FIRST KISS`
+                + `program_before_ZO MAN, ZO VROUW` 
+                + `program_before_STORAGE HUNTERS` 
+                + `program_before_FAME` 
+                + `program_before_E.R` 
+                + `program_before_ZELF JE PLAT DAK BOUWEN` 
+                + `program_before_GOOD BONES` 
+                + `program_before_UNEXPECTED TELL ALL` 
+                + `program_before_DE STERRENKAART` 
+                + `program_before_THE CAPTIVE` 
+                + `program_before_SUPERCAR MEGABUILD` 
+                + `program_before_AMERICAN BOYBAND` 
+                + `channel_SPIKE` 
+                + `program_before_HITLER, THE DEFINITIVE GUIDE` 
+                + `program_before_TWILIGHT` 
+                + `channel_Q2` 
+                + `program_before_LAST KNIGHTS` 
+                + `program_before_MEISJE VAN PLEZIER` 
+                + `position_in_break_2`
+                + `program_before_PYTHON HUNTERS` 
+                + `program_before_DE KOTMADAM` 
+                + `program_before_ATLANTA` 
+                + `program_before_BE COOL` 
+                + `program_before_TOMMY TELESHOPPING` 
+                + `program_before_K&P, KEY AND PEELE` 
+                + `program_before_DE DAG` 
+                + `program_before_ENFUSION LIVE` 
+                + `program_before_HELDEN VAN HIER, DOOR HET VUUR` 
+                + `program_before_ALLO 'ALLO!` 
+                + `program_before_Z NIEUWS` 
+                + `program_before_CSI NY` 
+                + `program_before_THE LAST KINGDOM` 
+                + `program_before_LOCKDOWN` 
+                + `program_before_MY SUPER EX-GIRLFRIEND` 
+                + `program_before_KOMEN ETEN` 
+                + `program_before_STONEHENGE DECODED` 
+                + `program_before_WW2, TREASURE HUNTERS` 
+                + `program_before_HART OF DIXIE` 
+                + `program_before_WE LOVE MUSIC VIDEOS` 
+                + `program_before_FLESSENHOUDER MAKEN` 
+                + `program_before_EMPIRE` 
+                + `program_before_NAVY NCIS` 
+                + `program_before_HIPPOTV SPORT` 
+                + `program_before_UEFA CHAMPIONS LEAGUE` 
+                + `program_before_NUANCES` 
+                + `program_before_JUPITER ASCENDING` 
+                + `program_before_WERKBANK MAKEN` 
+                + `program_before_COLD CASE` 
+                + `program_before_LAW & ORDER` 
+                + `program_before_LUNCH BOX` 
+                + `program_before_FAROEK` 
+                + `program_before_MUNCHIES GUIDE TO` 
+                + `program_before_XITE YEAR MIX` 
+                + `program_before_FLIGHT` 
+                + `program_before_PIXELS` 
+                + `program_before_DRAIN THE OCEANS` 
+                + `program_before_CODE 37` 
+                + `program_before_EXTREEM JALOERS` 
+                + `program_before_HOW IT'S MADE` 
+                + `program_before_THE ISLAND WITH BEAR GRYLLS` 
+                + `program_before_ADVENTURE TIME` 
+                + `program_before_TEACHERS` 
+                + `channel_COMEDY CENTRAL` 
+                + `program_before_MILLION DOLLAR LISTING` 
+                + `program_before_STORAGE WARS` 
+                + `program_before_9-1-2001` 
+                + `program_before_TUINPAD IN NATUURSTEEN` 
+                + `program_before_RISEN` 
+                + `program_before_THAT 70'S SHOW` 
+                + `program_before_THE TAKING OF PELHAM 123` 
+                + `program_before_RICK & MORTY` 
+                + `program_before_DE TIP` 
+                + `program_before_X-MEN, APOCALYPSE` 
+                + `program_before_WETSDOKTERS` 
+                + `program_before_RIDICULOUSNESS` 
+                + `program_before_DE ALPEN` 
+                + `program_before_STORAGE WARS CANADA` 
+                + `program_before_FIXER UPPER` 
+                + `program_before_THE INCREDIBLE DR. POL` 
+                + `program_before_WILL & GRACE` 
+                + `program_before_NASHVILLE` 
+                + `program_before_SEVEN YEAR SWITCH` 
+                + `program_before_HOW DO THEY DO IT?` 
+                + `program_before_MY LOTTERY DREAM HOME` 
+                + `program_before_EXPEDITION UNKNOWN` 
+                + `program_before_CODE BLACK` 
+                + `program_before_JUST TATTOO OF US` + `program_before_SHADES OF BLUE` , data=BEbroadtest)
+		
+
+##end of stepwise regression
 
 
 
