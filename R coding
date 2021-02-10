@@ -330,6 +330,29 @@ summary(linearNL_in2)
 
 
 
+######Belgium 5 min 
+linear5test3 <- lm(ad_effect ~ `program_before_WWE, RAW` 
+                   + `program_before_WE LOVE MUSIC VIDEOS`
+                   + `program_before_VLOER LEGGEN`
+                   + `program_before_SCIENCE OF STUPID`
+                   + `program_before_RELIC HUNTER`
+                   + `program_before_MY SUPER SWEET 16`
+                   + `program_before_KEVIN CAN WAIT`
+                   + `program_before_HUNGRY AF`
+                   + `program_before_HOW DO THEY DO IT?`
+                   + `program_before_GORONGOSA PARK, HET LEEUWENMYSTERIE`
+                   + `program_before_DE FAMILIE BACKELJAU`
+                   + `program_before_DE DAKEN VAN...`
+                   + `program_before_DE AMBACHTER`
+                   + `program_before_BORNEO'S SECRET KINGDOM`
+                   + `program_before_ARE YOU THE ONE?`
+                   + `program_before_ALLE ZAKEN OP EEN RIJTJE`
+                   + `program_before_ADVENTURE TIME`, data = BEbroad5mintest)
+summary(linear5test3)
+##########
+
+
+
 
 
 
