@@ -490,9 +490,19 @@ stepoutput<- lm(ad_effect1~gross_rating_point
 
 ##end of stepwise regression
 
+#####convert time chr column to time and then to morning, afternoon, evening and night
+broadtimebins <- broadcasting_data
+broadtimebins$time <- as.POSIXct(broadtimebins$time,format="%H:%M:%S")
 
-
-
+x=as.POSIXct(strptime(c("060000","115959","120000","175959","180000",
+                        "235959"),"%H%M%S"))
+library(tidyverse)
+broadtimebins$time <- case_when(
+  between(broadtimebins$time,x[1],x[2]) ~"morning",
+  between(broadtimebins$time,x[3],x[4]) ~"afternoon",
+  between(broadtimebins$time,x[5],x[6]) ~"evening",
+  TRUE ~"night")
+#####end of converting time chr column to time and then to morning, afternoon, evening and night
 
 
 
