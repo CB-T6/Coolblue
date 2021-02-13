@@ -506,9 +506,123 @@ broadtimebins$time <- case_when(
 
 
 
+########################Belgium 10 mins #######################
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library('fastDummies')
+library(Boruta) 
+
+traffic_data_in<- read.csv("C:/Users/kzkon/Downloads/Seminar Case Studies in Data Science and/traffic_data.R")
+broadcasting_data <-read.csv("C:/Users/kzkon/Downloads/Seminar Case Studies in Data Science and/broadcasting_data.R")
 
 
+#eliminate bounce variable
+traffic_data <- traffic_data_in[-7]
+#converting NAs to mean
+traffic_data <- traffic_data  %>% 
+  mutate(avg_session_quality = if_else(is.na(avg_session_quality) == TRUE, 
+                                       mean(avg_session_quality, na.rm = TRUE), avg_session_quality))
+#convert into dates -
+traffic_data$date_time <- as.POSIXct(traffic_data$date_time) # - this might take a while
+#factorize all the variables 
+traffic_data$medium <- as.factor(traffic_data$medium)
+traffic_data$visit_source <- as.factor(traffic_data$visit_source)
+traffic_data$page_category<-as.factor(traffic_data$page_category)
+traffic_data$country<- as.factor(traffic_data$country)
 
+#divide the countries. 
+
+bel_traffic <- traffic_data %>% 
+  filter(country=="Belgium")
+
+#now that we divide the datasets , "country" variable must go 
+
+bel_traffic <- bel_traffic[-7]
+
+#now lets deal with the broadcasting data 
+broadcasting_data$operator <- as.factor(broadcasting_data$operator)
+broadcasting_data$channel <- as.factor(broadcasting_data$channel)
+broadcasting_data$length_of_spot <- as.factor(broadcasting_data$length_of_spot)
+broadcasting_data$program_before <- as.factor(broadcasting_data$program_before)
+broadcasting_data$program_after <- as.factor(broadcasting_data$program_after)
+broadcasting_data$program_category_before <- as.factor(broadcasting_data$program_category_before)
+broadcasting_data$program_category_after <- as.factor(broadcasting_data$program_category_after)
+broadcasting_data$product_category <- as.factor(broadcasting_data$product_category)
+broadcasting_data$country <- as.factor(broadcasting_data$country)
+
+#we dividing broadcasting data by country 
+
+bel_broad <- broadcasting_data %>% 
+  filter(country == "Belgium")
+#erasing the "country" column from each 
+bel_broad <- bel_broad[-13]
+
+
+#converting date and time into seconds from origin time(1970) for both countries - traffic data  
+bel_traffic$date_time <- as.numeric(bel_traffic$date_time)
+
+
+#converting date and time into seconds from origin time(1970) for both countries - traffic data  - belgium
+
+bel_broad$dateandtime <- as.POSIXct(paste(bel_broad$date, bel_broad$time), 
+                                    format="%Y-%m-%d %H:%M:%S") #create seperate columns for date and time 
+bel_broad$dateandtime <- as.numeric(bel_broad$dateandtime)
+
+#now I have to delete the old columns of broadcasting data of "date" & "time"
+
+bel_broad <- bel_broad[-(3:4)]
+#now bel_broad  have 11 variables 
+bel_broad$dateandtime
+
+#Belgium
+bel_broad$tenminbefore <- sapply(bel_broad$dateandtime, 
+                                  function(x){ sum(bel_traffic$visits_index[
+                                    (x >= bel_traffic$date_time) & 
+                                      (x - 600 <=bel_traffic$date_time)])}) #- it's going to take some time
+
+bel_broad$tenminafter <- sapply(bel_broad$dateandtime, 
+                                 function(x){ sum(bel_traffic$visits_index[
+                                   (x <= bel_traffic$date_time) & 
+                                     (x + 600 >= bel_traffic$date_time)])})#- it's going to take some time
+
+
+#now that you created the two variables I am going to take the difference of it
+bel_broad$ad_effect <- bel_broad$tenminafter - bel_broad$tenminbefore
+
+
+#create dummies to run lm with interactions 
+
+#create a duplicate dataset 
+bel_broad1 <- bel_broad
+time_bel <- bel_broad$dateandtime #keep date and time at a vector 
+bel_broad1 <- bel_broad1[,-(11:13)] #from the new created variables we only keep the ad_effect
+names(bel_broad1)
+#now working with the neth_broad1
+#create dummies for the regression
+#No.2 without bothering the program before,program after, program category before and program category
+bel_broad2 <- dummy_cols(bel_broad1, select_columns = c('operator', 'channel', 'product_category', 
+                                                          'position_in_break', 'length_of_spot'), remove_selected_columns = TRUE)
+#No.3 including bothering the program before,program after, program category before and program category
+bel_broad3 <- dummy_cols(bel_broad1, select_columns = c('operator', 'channel', 
+                                                          'program_before', 'program_after',
+                                                          'program_category_before', 'program_category_after', 
+                                                          'product_category', 'position_in_break', 'length_of_spot'), remove_selected_columns = TRUE)
+
+
+bel_broad3 <- bel_broad3[,which(colSums(bel_broad3) !=0)]
+
+### Stepwise Regression 
+FitAll <- lm(ad_effect~.,data = bel_broad3)
+FitStart <- lm(ad_effect~1,data= bel_broad3)
+step <- step(FitStart,direction = "both" ,scope = formula(FitAll))
+summary(step)
+s
+hortlistedVars <- names(unlist(step[[1]])) # get the shortlisted variable.
+shortlistedVars <- shortlistedVars[!shortlistedVars %in% "(Intercept)"] # remove intercept
+
+
+#################end of Belgium 10 mins#############################
 
 
 
