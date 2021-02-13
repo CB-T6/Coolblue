@@ -622,7 +622,40 @@ hortlistedVars <- names(unlist(step[[1]])) # get the shortlisted variable.
 shortlistedVars <- shortlistedVars[!shortlistedVars %in% "(Intercept)"] # remove intercept
 
 
-#################end of Belgium 10 mins#############################
+####end of Belgium 10 mins####
+
+#####Plots
+
+#Plots for Interpretations ! Good but unreadable
+library(tidyverse)
+library(tidymodels)
+
+#stepout is the name of the lm model . -1 is used for the intercept to be eliminated.
+
+
+stepoutput%>%
+  tidy()%>%
+  slice(-1)%>%
+  ggplot(aes(x=term, y= estimate)) +
+  geom_point() +
+  coord_flip()
+
+
+stepoutput%>%
+  tidy()%>%
+  slice(-1)%>%
+  mutate(pos_neg= if_else(estimate<= 0, "Negative","Positive"))%>%
+  ggplot(aes(x=term, y= estimate, color= pos_neg)) +
+  geom_boxplot() +
+  coord_flip()
+
+
+
+
+
+
+
+
 
 
 
