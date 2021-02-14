@@ -650,6 +650,7 @@ stepoutput%>%
   coord_flip()
 
 #########plot vector of coefs from a regression
+library(jtools)
 plot_summs(BElm, coefs = c("gross_rating_point", "program_before_THE.HANGOVER.PART.III", 
                                       "channel_SPIKE", "program_category_before_debate.talk.show"), scale = TRUE, ci_level = 0.99)
 #######end of plotting coefs
